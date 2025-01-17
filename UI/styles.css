@@ -1,0 +1,140 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #0e2f25;
+    color: #e4f0e2;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #153f36;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+h1 {
+    text-align: center;
+    color: #9ee6a0;
+}
+
+p {
+    text-align: center;
+    font-size: 1.2em;
+    line-height: 1.5;
+}
+
+.upload-section {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.drag-drop {
+    border: 2px dashed #9ee6a0;
+    border-radius: 10px;
+    padding: 30px;
+    background-color: #0e2f25;
+    color: #9ee6a0;
+    cursor: pointer;
+    margin-bottom: 15px;
+    transition: background-color 0.3s;
+}
+
+.drag-drop:hover {
+    background-color: #1a4f3e;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.file-info {
+    font-size: 1em;
+    color: #e4f0e2;
+    margin: 10px 0;
+}
+
+.btn {
+    padding: 10px 20px;
+    font-size: 1em;
+    background-color: #267d6b;
+    color: #e4f0e2;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: #2d8f7c;
+}
+
+#record-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffbb33; /* Google's Voice Search button color */
+    border-radius: 50%;
+    padding: 15px;
+    width: 60px;
+    height: 60px;
+    cursor: pointer;
+    margin-top: 10px;
+    border: none;
+    transition: background-color 0.3s;
+}
+
+#record-btn:hover {
+    background-color: #fbbd3c;
+}
+
+#mic-icon {
+    width: 30px;
+    height: 30px;
+}
+
+#recording {
+    background-color: #e74c3c;
+    animation: blink 0.5s infinite alternate;
+}
+
+@keyframes blink {
+    50% { background-color: red; }
+}
+
+.progress-bar-container {
+    display: none;
+    margin: 20px 0;
+}
+
+.progress-bar {
+    width: 100%;
+    background-color: #e4f0e2;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    height: 20px;
+    width: 0%;
+    background-color: #267d6b;
+    transition: width 0.3s;
+}
+
+.results {
+    display: none;
+    text-align: center;
+    margin: 20px 0;
+    padding: 10px;
+    background-color: #1a4f3e;
+    border-radius: 5px;
+}
+
+footer {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 0.9em;
+    color: #9ee6a0;
+}
