@@ -1,82 +1,92 @@
-const recordBtn = document.getElementById('record-btn');
-const micIcon = document.getElementById('mic-icon');
-const fileUpload = document.getElementById('file-upload');
-const fileInfo = document.getElementById('file-info');
-const predictBtn = document.getElementById('predict-btn');
-const progressBarContainer = document.getElementById('progress-bar-container');
-const progressBarFill = document.getElementById('progress-bar-fill');
-const results = document.getElementById('results');
+// Elements
+const micBtn = document.getElementById("micBtn");
+const fileInput = document.getElementById("fileInput");
+const dragArea = document.getElementById("dragArea");
+const progressBar = document.getElementById("progressBar");
+const predictionResult = document.getElementById("prediction");
 
-// State to track whether we are recording
-let isRecording = false;
-let mediaRecorder;
+// Microphone and File Upload Handling
+micBtn.addEventListener("click", startRecording);
+fileInput.addEventListener("change", handleFileInput);
+dragArea.addEventListener("dragover", handleDragOver);
+dragArea.addEventListener("drop", handleFileDrop);
+
+let recorder;
 let audioChunks = [];
 
-recordBtn.addEventListener('click', () => {
-    if (isRecording) {
-        // Stop recording
-        mediaRecorder.stop();
-        recordBtn.classList.remove('recording');
-        micIcon.src = 'microphone-icon.png';  // Reset the icon
+// Start recording when microphone button is clicked
+function startRecording() {
+    navigator.mediaDevices.getUserMedia({ audio: true })
+        .then(stream => {
+            recorder = new MediaRecorder(stream);
+            recorder.ondataavailable = event => {
+                audioChunks.push(event.data);
+            };
+            recorder.onstop = () => {
+                const audioBlob = new Blob(audioChunks, { type: "audio/wav" });
+                processAudio(audioBlob);
+            };
+            recorder.start();
+            micBtn.textContent = "Stop Recording";
+            micBtn.onclick = stopRecording;
+        })
+        .catch(err => {
+            console.error("Error accessing microphone: ", err);
+            alert("Please allow access to your microphone.");
+        });
+}
+
+// Stop recording and trigger processing
+function stopRecording() {
+    recorder.stop();
+    micBtn.textContent = "Recording Stopped";
+    micBtn.onclick = startRecording;
+}
+
+// Handle .wav file input
+function handleFileInput(event) {
+    const file = event.target.files[0];
+    if (file && file.type.startsWith("audio")) {
+        processAudio(file);
     } else {
-        // Start recording
-        navigator.mediaDevices.getUserMedia({ audio: true })
-            .then(stream => {
-                mediaRecorder = new MediaRecorder(stream);
-                mediaRecorder.start();
-                
-                mediaRecorder.ondataavailable = event => {
-                    audioChunks.push(event.data);
-                };
-                
-                mediaRecorder.onstop = () => {
-                    const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
-                    const audioUrl = URL.createObjectURL(audioBlob);
-                    const audio = new Audio(audioUrl);
-                    audioChunks = [];  // Clear the chunks
-                    // Show the file info
-                    fileInfo.textContent = 'Audio Recorded';
-                    // You can now send the audio for prediction
-                };
-
-                recordBtn.classList.add('recording');
-                micIcon.src = 'stop-icon.png';  // Change to a stop icon
-            })
-            .catch(err => {
-                alert('Error accessing microphone: ' + err);
-            });
+        alert("Please upload a valid audio file.");
     }
-    
-    isRecording = !isRecording;
-});
+}
 
-predictBtn.addEventListener('click', () => {
-    if (!fileUpload.files.length && !audioChunks.length) {
-        alert('Please upload or record an audio file first.');
-        return;
+// Handle file drag and drop
+function handleDragOver(event) {
+    event.preventDefault();
+    dragArea.classList.add("drag-over");
+}
+
+function handleFileDrop(event) {
+    event.preventDefault();
+    dragArea.classList.remove("drag-over");
+    const file = event.dataTransfer.files[0];
+    if (file && file.type.startsWith("audio")) {
+        processAudio(file);
+    } else {
+        alert("Please drop a valid audio file.");
     }
+}
 
-    // Simulate prediction process
-    progressBarContainer.style.display = 'block';
-    progressBarFill.style.width = '0%';
-    results.style.display = 'none';
+// Process audio and call the backend for prediction
+function processAudio(audioBlob) {
+    updateProgressBar(0);
 
-    let progress = 0;
-    const interval = setInterval(() => {
-        progress += 10;
-        progressBarFill.style.width = progress + '%';
+    // Simulating backend processing with a timeout
+    setTimeout(() => {
+        updateProgressBar(100);
+        displayPrediction("Male Adult"); // This would be replaced with actual prediction logic
+    }, 3000);
+}
 
-        if (progress >= 100) {
-            clearInterval(interval);
-            progressBarContainer.style.display = 'none';
-            results.style.display = 'block';
+// Update the progress bar
+function updateProgressBar(value) {
+    progressBar.value = value;
+}
 
-            // Simulated results
-            document.getElementById('predicted-name').textContent = 'Sample User';
-            document.getElementById('predicted-age').textContent = '25';
-            document.getElementById('predicted-gender').textContent = 'Male';
-            document.getElementById('reduction-accuracy').textContent = '95%';
-            document.getElementById('rmse-value').textContent = '0.02';
-        }
-    }, 300);
-});
+// Display the prediction result
+function displayPrediction(prediction) {
+    predictionResult.textContent = `Prediction is: ${prediction}`;
+}

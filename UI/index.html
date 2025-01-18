@@ -3,43 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Audio-Based Age and Gender Predictor</title>
+    <title>Audio-based Age and Gender Predictor</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
-        <h1>Audio-Based Age and Gender Predictor</h1>
-        <p>Upload an audio file to predict the age and gender of the speaker. Supported formats: .wav, .mp3.<br> File size should not exceed 5MB.</p>
-        <div class="upload-section">
-            <label for="file-upload" class="drag-drop">Drag and drop your audio file here or click to upload</label>
-            <input type="file" id="file-upload" accept="audio/*">
-            <div class="file-info" id="file-info">No file selected</div>
-
-            <!-- Voice recording button -->
-            <button class="btn" id="record-btn">
-                <img src="microphone-icon.png" alt="Record" id="mic-icon"> Record Voice
-            </button>
-
-            <button class="btn" id="predict-btn">Predict</button>
-        </div>
-        <div class="progress-bar-container" id="progress-bar-container">
-            <div class="progress-bar">
-                <div class="progress-bar-fill" id="progress-bar-fill"></div>
+        <h1>Audio-based Age and Gender Predictor</h1>
+        
+        <!-- File Upload or Microphone Section -->
+        <div class="input-section">
+            <button id="micBtn">Record Voice</button>
+            <input type="file" id="fileInput" accept=".wav, audio/*" />
+            <div id="dragArea" class="drag-area">
+                <p>Drag and drop a .wav file here</p>
             </div>
         </div>
-        <div class="results" id="results">
-            <h2>Prediction Results</h2>
-            <p><strong>Name:</strong> <span id="predicted-name">N/A</span></p>
-            <p><strong>Age:</strong> <span id="predicted-age">N/A</span></p>
-            <p><strong>Gender:</strong> <span id="predicted-gender">N/A</span></p>
-            <p><strong>Reduction Accuracy:</strong> <span id="reduction-accuracy">N/A</span></p>
-            <p><strong>RMSE:</strong> <span id="rmse-value">N/A</span></p>
+
+        <!-- Progress Bar -->
+        <div id="progressBarContainer" class="progress-container">
+            <progress id="progressBar" max="100" value="0"></progress>
+        </div>
+
+        <!-- Prediction Result Section -->
+        <div id="result" class="result-section">
+            <p id="prediction">Prediction will appear here...</p>
         </div>
     </div>
-    <footer>
-        <p>Designed with care for simplicity and effectiveness. Enjoy the predictions!</p>
-    </footer>
 
-    <script src="scripts.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
