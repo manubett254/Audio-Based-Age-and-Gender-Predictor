@@ -2,19 +2,26 @@
 const micBtn = document.getElementById("micBtn");
 const fileInput = document.getElementById("fileInput");
 const dragArea = document.getElementById("dragArea");
+const predictBtn = document.getElementById("predictBtn");
 const progressBar = document.getElementById("progressBar");
 const predictionResult = document.getElementById("prediction");
 
-// Microphone and File Upload Handling
-micBtn.addEventListener("click", startRecording);
-fileInput.addEventListener("change", handleFileInput);
-dragArea.addEventListener("dragover", handleDragOver);
-dragArea.addEventListener("drop", handleFileDrop);
-
+let audioBlob = null;
 let recorder;
 let audioChunks = [];
 
+// Enable predict button when audio is ready
+function enablePredictButton() {
+    if (audioBlob) {
+        predictBtn.disabled = false;
+    } else {
+        predictBtn.disabled = true;
+    }
+}
+
 // Start recording when microphone button is clicked
+micBtn.addEventListener("click", startRecording);
+
 function startRecording() {
     navigator.mediaDevices.getUserMedia({ audio: true })
         .then(stream => {
@@ -23,8 +30,8 @@ function startRecording() {
                 audioChunks.push(event.data);
             };
             recorder.onstop = () => {
-                const audioBlob = new Blob(audioChunks, { type: "audio/wav" });
-                processAudio(audioBlob);
+                audioBlob = new Blob(audioChunks, { type: "audio/wav" });
+                enablePredictButton();
             };
             recorder.start();
             micBtn.textContent = "Stop Recording";
@@ -44,16 +51,22 @@ function stopRecording() {
 }
 
 // Handle .wav file input
+fileInput.addEventListener("change", handleFileInput);
+
 function handleFileInput(event) {
     const file = event.target.files[0];
     if (file && file.type.startsWith("audio")) {
-        processAudio(file);
+        audioBlob = file;
+        enablePredictButton();
     } else {
         alert("Please upload a valid audio file.");
     }
 }
 
 // Handle file drag and drop
+dragArea.addEventListener("dragover", handleDragOver);
+dragArea.addEventListener("drop", handleFileDrop);
+
 function handleDragOver(event) {
     event.preventDefault();
     dragArea.classList.add("drag-over");
@@ -64,20 +77,23 @@ function handleFileDrop(event) {
     dragArea.classList.remove("drag-over");
     const file = event.dataTransfer.files[0];
     if (file && file.type.startsWith("audio")) {
-        processAudio(file);
+        audioBlob = file;
+        enablePredictButton();
     } else {
         alert("Please drop a valid audio file.");
     }
 }
 
-// Process audio and call the backend for prediction
-function processAudio(audioBlob) {
+// Handle prediction button click
+predictBtn.addEventListener("click", processAudio);
+
+function processAudio() {
     updateProgressBar(0);
 
-    // Simulating backend processing with a timeout
+    // Simulate backend processing with a timeout
     setTimeout(() => {
         updateProgressBar(100);
-        displayPrediction("Male Adult"); // This would be replaced with actual prediction logic
+        displayPrediction("Male Adult"); // Simulated prediction
     }, 3000);
 }
 

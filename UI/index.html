@@ -9,14 +9,24 @@
 <body>
     <div class="container">
         <h1>Audio-based Age and Gender Predictor</h1>
-        
+
+        <!-- Instructions -->
+        <div class="instructions">
+            <p>Upload a .wav file, or record using your microphone. After uploading, click "Predict" to get the results.</p>
+        </div>
+
         <!-- File Upload or Microphone Section -->
         <div class="input-section">
-            <button id="micBtn">Record Voice</button>
-            <input type="file" id="fileInput" accept=".wav, audio/*" />
+            <button id="micBtn" class="btn">Record Voice</button>
+            <input type="file" id="fileInput" accept=".wav, audio/*" class="input-file"/>
             <div id="dragArea" class="drag-area">
                 <p>Drag and drop a .wav file here</p>
             </div>
+        </div>
+
+        <!-- Predict Button -->
+        <div class="predict-btn-container">
+            <button id="predictBtn" class="btn" disabled>Predict</button>
         </div>
 
         <!-- Progress Bar -->
