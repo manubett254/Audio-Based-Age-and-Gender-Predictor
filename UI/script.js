@@ -5,6 +5,7 @@ const dragArea = document.getElementById("dragArea");
 const predictBtn = document.getElementById("predictBtn");
 const progressBar = document.getElementById("progressBar");
 const predictionResult = document.getElementById("prediction");
+const fileMessage = document.getElementById("fileMessage");
 
 let audioBlob = null;
 let recorder;
@@ -32,6 +33,7 @@ function startRecording() {
             recorder.onstop = () => {
                 audioBlob = new Blob(audioChunks, { type: "audio/wav" });
                 enablePredictButton();
+                fileMessage.textContent = "Recording completed!";
             };
             recorder.start();
             micBtn.textContent = "Stop Recording";
@@ -58,6 +60,7 @@ function handleFileInput(event) {
     if (file && file.type.startsWith("audio")) {
         audioBlob = file;
         enablePredictButton();
+        fileMessage.textContent = `Uploaded file: ${file.name}`;
     } else {
         alert("Please upload a valid audio file.");
     }
@@ -79,6 +82,7 @@ function handleFileDrop(event) {
     if (file && file.type.startsWith("audio")) {
         audioBlob = file;
         enablePredictButton();
+        fileMessage.textContent = `Uploaded file: ${file.name}`;
     } else {
         alert("Please drop a valid audio file.");
     }
